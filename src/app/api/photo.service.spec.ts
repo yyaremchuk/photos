@@ -7,7 +7,7 @@ import { IPhoto } from './photo.interface';
 
 const TEST_URL: string = 'http://jsonplaceholder.typicode.com';
 
-xdescribe('PhotoService', () => {
+describe('PhotoService', () => {
   let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
 
@@ -39,11 +39,10 @@ xdescribe('PhotoService', () => {
     // Make an HTTP GET request
     const photoService: PhotoService = TestBed.get(PhotoService);
     photoService.getPhotos(0, 10).subscribe((response: Array<IPhoto>) =>
-        expect(response).toEqual(testData)
-      );
+      expect(response).toEqual(testData)
+    );
 
-    // @TODO: Fix query params
-    const req = httpTestingController.expectOne(`${TEST_URL}/photos`);
+    const req = httpTestingController.expectOne(`${TEST_URL}/photos?_start=0&_limit=10`);
 
     // Assert that the request is a GET.
     expect(req.request.method).toEqual('GET');
