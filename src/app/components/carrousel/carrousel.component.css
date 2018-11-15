@@ -1,0 +1,7 @@
+.thumbnail {
+  margin: auto 0;
+  vertical-align: middle;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
