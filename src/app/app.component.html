@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <h1>Demo App</h1>
-    <div>Current: {{ (current$ | async)?.id }}</div>
+    <div>Current image ID: {{ (current$ | async)?.id }}</div>
     <app-carrousel
       [current]="current$ | async"
       [previous]="previous$ | async"

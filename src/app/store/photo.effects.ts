@@ -46,7 +46,6 @@ export class PhotoEffects {
       !state.photos.loading && state.photos.preload
     ),
     map(([action, state]: [LoadAction, IState]) => {
-      console.log('loading...', state.photos.loading, ', frameStart...', state.photos.frameStart, ', nextFrameStart...', state.photos.nextFrameStart);
       return new LoadAction();
     })
   );

@@ -13,11 +13,15 @@ export class PhotoSelectors {
 
   public static next: MemoizedSelector<IState, IPhoto> = createSelector(selectFeature,
     (state: IPhotoState) => {
-      return state.photos.length > state.currentIndex + 1 ? state.photos[state.currentIndex + 1] : null;
+      const internalIndex: number = state.currentIndex - state.frameStart + 1;
+      return state.photos.length > internalIndex ? state.photos[internalIndex] : null;
     }
   );
 
   public static previous: MemoizedSelector<IState, IPhoto> = createSelector(selectFeature,
-    (state: IPhotoState) => state.currentIndex > 0 ? state.photos[state.currentIndex - 1] : null
+    (state: IPhotoState) => {
+      const internalIndex: number = state.currentIndex - state.frameStart - 1;
+      return internalIndex >= 0 ? state.photos[internalIndex] : null;
+    }
   );
 }

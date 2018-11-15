@@ -9,7 +9,7 @@ export function photoReducer(state = photoInitialState, action: PhotoActions): I
   switch (action.type) {
 
     case PhotoActionTypes.SELECT: {
-      let { currentIndex, nextFrameStart, preload } = state;
+      let { currentIndex, frameStart, nextFrameStart, preload } = state;
 
       if (action.direction === -1 && state.currentIndex === 0) {
         return state;
@@ -24,8 +24,8 @@ export function photoReducer(state = photoInitialState, action: PhotoActions): I
         preload = true;
       }
 
-      if (action.direction === -1 && state.currentIndex === environment.newFrameLoadThreshold) {
-        nextFrameStart = state.frameStart - environment.frameSize;
+      if (action.direction === -1 && frameStart > 0 && (currentIndex - frameStart === environment.newFrameLoadThreshold)) {
+        nextFrameStart = frameStart - environment.frameSize;
         preload = true;
       }
 
@@ -56,8 +56,6 @@ export function photoReducer(state = photoInitialState, action: PhotoActions): I
         frameEnd = length - 1;
       }
 
-      console.log(frameStart, nextFrameStart);
-
       // check whether we need to remove one of old frames and adjust indexes
       if (nextFrameStart > frameStart) {
         photos = [
@@ -65,14 +63,27 @@ export function photoReducer(state = photoInitialState, action: PhotoActions): I
           ...photos
         ];
 
-        console.log('frameEnd...', frameEnd, ', length...', length, ', frameSize...', frameSize);
-
         frameEnd += length;
 
         // we do not want photos array to grow
         if (photos.length > 2 * frameSize) {
           photos = photos.slice(frameSize);
           frameStart += frameSize;
+        }
+      }
+
+      if (nextFrameStart < frameStart) {
+        photos = [
+          ...photos,
+          ...state.photos,
+        ];
+
+        frameStart -= length;
+
+        // we do not want photos array to grow
+        if (photos.length > 2 * frameSize) {
+          photos = photos.slice(0, 2 * frameSize);
+          frameEnd -= frameSize;
         }
       }
 
