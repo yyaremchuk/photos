@@ -18,7 +18,12 @@ export class PhotoService {
   ) { }
 
   public getPhotos(start: number, limit: number): Observable<Array<IPhoto>> {
-    return this.http.get<Array<IPhoto>>(`${API_ROOT_URL}/photos?_start=${start}&_limit=${limit}`).pipe(
+    const params: { [key: string]: string } = {
+      _start: start.toString(),
+      _limit: limit.toString()
+    };
+
+    return this.http.get<Array<IPhoto>>(`${API_ROOT_URL}/photos`, { params }).pipe(
       catchError((err: any) => {
         console.log('error => ', err);
         return Observable.throw(err);
